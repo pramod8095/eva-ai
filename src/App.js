@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from "react-router";
+import Details from "./components/Details";
+import Eva from "./components/Eva";
+import Results from "./components/Results";
+import Notfound from "./components/Notfound";
+
+import React, { useEffect } from "react";
 
 function App() {
+
+  // Disable right click
+  useEffect(() => {
+    const handleContextmenu = (e) => e.preventDefault();
+    document.addEventListener("contextmenu", handleContextmenu);
+    return () => document.removeEventListener("contextmenu", handleContextmenu);
+  }, []);
+
+  // Vanta.js background
+ 
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  
+      <div >
+        <Routes>
+          <Route index path="/" element={<Details />} />
+          <Route path="/eva" element={<Eva />} />
+          <Route path="/results" element={<Results />} />
+          <Route path="*" element={<Notfound />} />
+        </Routes>
+      </div>
+   
   );
 }
 
