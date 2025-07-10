@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import * as THREE from "three";
-import NET from "vanta/dist/vanta.clouds.min"; // you can use birds, waves, etc.
+import NET from "vanta/dist/vanta.clouds.min"; 
 import "./index.css";
 import {
   Button,
@@ -13,33 +13,45 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useNavigate } from "react-router";
 
 const Details = () => {
   const nameRef = useRef();
   const emailRef = useRef();
   const techRef = useRef();
   const totalExpRef = useRef();
+  const navigate = useNavigate();
 
-    const vantaRef = useRef(null);
-    const [vantaEffect, setVantaEffect] = useState(null);
-    useEffect(() => {
-    if (!vantaEffect) {
-      setVantaEffect(
-        NET({
-          el: vantaRef.current,
-          THREE,
-          color: 0xffffff,
-          backgroundColor: 0x0d1117,
-          points: 10,
-          maxDistance: 20,
-          spacing: 15,
-        })
-      );
+  const vantaRef = useRef(null);
+  const [vantaEffect, setVantaEffect] = useState(null);
+  useEffect(() => {
+  let vantaInstance;
+  if (!vantaEffect && vantaRef.current) {
+    vantaInstance = NET({
+      el: vantaRef.current,
+      THREE,
+      color: 0xffffff,
+      backgroundColor: 0x0d1117,
+      points: 10,
+      maxDistance: 20,
+      spacing: 15,
+      
+    });
+    setVantaEffect(vantaInstance);
+  }
+
+  return () => {
+    if (vantaInstance) {
+      try {
+        vantaInstance.destroy();
+      } catch (err) {
+        console.warn("DOM Destroy failed:", err);
+      }
     }
-    return () => {
-      if (vantaEffect) vantaEffect.destroy();
-    };
-  }, [vantaEffect]);
+  };
+}, []);
+
+
 
   const submitHandler = () => {
     const details = {
@@ -54,15 +66,23 @@ const Details = () => {
 
   const sendData = async (details) => {
     console.log("in send data", details);
+    navigate("/eva")
+
   };
 
   return (
     <div className="bg-video-wrap">
       <div ref={vantaRef} className="vanta-bg" style={{ minHeight: "100vh" }}>
-        
-        <div className="overlay"></div>
+        <div className="title">
+          <pre >
+            <Typography variant="h2"> AI - Interviewer </Typography>
+           <span><Typography variant="h7"> Designed by Pramod, powered by ChatGPT and D-ID</Typography></span>
+           
+          </pre>
+        </div>
+
         <div className="card-content">
-          <Card sx={{ opacity: "80%", width: "100%" }}>
+          <Card sx={{ opacity: "80%", width: "100%", backdropFilter: "blur(10px)" }}>
             <CardContent>
               <Typography variant="h5" component="div">
                 💡 Interview Setup
@@ -81,6 +101,7 @@ const Details = () => {
                 variant="outlined"
                 margin="dense"
                 inputRef={nameRef}
+                required
               />
               <TextField
                 fullWidth

@@ -4,7 +4,7 @@ import Eva from "./components/Eva";
 import Results from "./components/Results";
 import Notfound from "./components/Notfound";
 
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 
 function App() {
 
@@ -21,12 +21,14 @@ function App() {
   return (
   
       <div >
+        <Suspense fallback=".....">
         <Routes>
           <Route index path="/" element={<Details />} />
           <Route path="/eva" element={<Eva />} />
           <Route path="/results" element={<Results />} />
           <Route path="*" element={<Notfound />} />
         </Routes>
+        </Suspense>
       </div>
    
   );
